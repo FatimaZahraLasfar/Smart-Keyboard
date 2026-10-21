@@ -4,21 +4,6 @@ An interactive NLP application built with **Python and Streamlit** that explores
 
 🔗 **Live Demo:** [Smart Keyboard V2](https://smart-keyboard.streamlit.app/)
 
-## 📌 Table of Contents
-
-- [Overview](#-overview)
-- [Features](#-features)
-- [How It Works](#-how-it-works)
-- [Technologies](#-technologies)
-- [Project Structure](#-project-structure)
-- [Installation](#-installation)
-- [Usage](#-usage)
-- [Mathematical Background](#-mathematical-background)
-- [Dataset](#-dataset)
-- [Limitations](#-limitations)
-- [Future Improvements](#-future-improvements)
-- [Author](#-author)
-
 ## 🎯 Overview
 
 Smart Keyboard V2 is an educational project designed to demonstrate how statistical language models can predict the next word in a sequence.
@@ -193,53 +178,58 @@ Open the local URL displayed in the terminal, usually `http://localhost:8501`.
 
 ## 📐 Mathematical Background
 
-### N-Gram Language Models
+### 1. N-Gram Language Models
 
-An N-gram model estimates the probability of a word based on the preceding \(n-1\) words.
+An N-gram model estimates the probability of a word based on the preceding words.
 
-Using the Markov assumption:
+**General formula:**
 
-\[
-P(w_i \mid w_1,\ldots,w_{i-1})
-\approx P(w_i \mid w_{i-n+1},\ldots,w_{i-1})
-\]
+<p align="center">
+  <code>P(wᵢ | w₁, ..., wᵢ₋₁) ≈ P(wᵢ | wᵢ₋ₙ₊₁, ..., wᵢ₋₁)</code>
+</p>
 
-For example:
+Examples:
 
-- Unigram: \(P(w_i)\)
-- Bigram: \(P(w_i \mid w_{i-1})\)
-- Trigram: \(P(w_i \mid w_{i-2},w_{i-1})\)
+- **Unigram:** P(wᵢ)
+- **Bigram:** P(wᵢ | wᵢ₋₁)
+- **Trigram:** P(wᵢ | wᵢ₋₂, wᵢ₋₁)
 
-### Add-k Smoothing
+### 2. Add-k Smoothing
 
-The model uses the following probability estimate:
+Add-k smoothing prevents unseen word transitions from automatically receiving a zero probability.
 
-\[
-P(w \mid c)=
-\frac{C(c,w)+k}{C(c)+k|V|}
-\]
+<p align="center">
+  <code>P(w | c) = (C(c, w) + k) / (C(c) + k × |V|)</code>
+</p>
 
 Where:
 
-- \(C(c,w)\) is the number of times word \(w\) follows context \(c\).
-- \(C(c)\) is the total number of transitions observed for context \(c\).
-- \(k\) is the smoothing constant.
-- \(|V|\) is the vocabulary size.
+- `C(c, w)` is the number of times word `w` follows context `c`.
+- `C(c)` is the total number of occurrences of context `c` followed by a word.
+- `k` is the smoothing parameter.
+- `|V|` is the vocabulary size.
 
-When \(k=1\), this becomes Laplace smoothing. When \(k=0\), unseen transitions can receive zero probability.
+When `k = 1`, the method is called **Laplace smoothing**. When `k = 0`, unseen transitions can receive a probability of zero.
 
-### Perplexity
+### 3. Perplexity
 
-For a sequence of \(N\) predicted tokens:
+Perplexity measures how well a language model predicts a sequence of words. Lower perplexity generally indicates better predictive performance on the same evaluation data.
 
-\[
-\operatorname{PP}(W)=
-\exp\left(
--\frac{1}{N}\sum_{i=1}^{N}\log P(w_i\mid w_{<i})
-\right)
-\]
+**Formula:**
 
-Perplexity measures how uncertain the model is when predicting a sequence. Comparisons are most meaningful when models are evaluated on the same data with consistent preprocessing and tokenization.
+<p align="center">
+  <code>PP(W) = exp(−(1/N) × Σᵢ₌₁ᴺ log P(wᵢ | w₁, ..., wᵢ₋₁))</code>
+</p>
+
+Where:
+
+- `N` is the number of predicted tokens.
+- `P(wᵢ | w₁, ..., wᵢ₋₁)` is the probability assigned to token `wᵢ` given its preceding context.
+- `log` is the natural logarithm.
+- `exp` is the exponential function.
+
+**Important:** Perplexity comparisons are meaningful when models use the same evaluation corpus, tokenization, and probability conventions.
+
 
 ## 📚 Dataset
 

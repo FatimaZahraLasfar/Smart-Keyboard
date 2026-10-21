@@ -1,2 +1,5 @@
-matplotlib
 streamlit
+datasets
+nltk
+pandas
+altair

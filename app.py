@@ -4,6 +4,9 @@ import random
 import math
 import pandas as pd
 import altair as alt
+import os
+import subprocess
+import sys
 from src.pipeline import NGramModel, EOS, UNK, load_documents, backoff_top_k
 
 # --- Page Config ---
@@ -113,10 +116,10 @@ st.caption("Powered by an n-gram model trained on WikiText-2. Experiment with sm
 @st.cache_resource
 def load_data():
     csv_path = "data/corpus_hf.csv"
-    # If the file doesn't exist, download it using your script
+    # If the file doesn't exist (like on a fresh deploy), download it
     if not os.path.exists(csv_path):
-        with st.spinner("First run: Downloading and preparing WikiText-2 dataset..."):
-            subprocess.run(["python", "data/load_hf_data.py"], check=True)
+        with st.spinner("First run: Downloading and preparing WikiText-2 dataset. This may take a few minutes..."):
+            subprocess.run([sys.executable, "data/load_hf_data.py"], check=True)
     
     # Now proceed to load as normal
     docs = load_documents(path=csv_path)
